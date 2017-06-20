@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset=UTF-8>
+<title>NamberZ</title>
+</head>
+<body>
+
+<script>
+var d=document,w=window,t,m,n,s,u=[],g,h,p=[],q=[],x;
+
+
+
+function a()
+{
+  var A,B='toString',C='getElementById',D='value';
+  t=[],
+  s=+(d[C]('a')[D]),
+  m={'Increasing':0,'Adding':1,'Multiplication':2}[d[C]('b')[D]],
+  n=+d[C]('c')[D],
+  g=d[C]('d').checked,
+  h=(+d[C]('e')[D]+50)/2,
+  p=[],
+  q=[];
+  
+  for(i=0;i<s;++i)
+  {
+    t[i]=[];
+    u[i]=[];
+    for(j=0;j<s;++j)
+    {
+      t[i][j]=0;
+    }
+  }
+  
+  for(i=0;i<s;++i)
+    for(j=0;j<s;++j)
+      u[i][j]=t[i][j];
+  
+  z();
+  y();
+  
+  e();
+  f();
+}
+
+function y()
+{
+  var E=Math.round,F=s*s+4;
+  x=Math.random()*360;
+  q[0]='360,100%,100';
+  for(i=1;i<F;++i)
+  {
+    q[i]= E((i*360/(F+1))+x)%360;
+  }
+}
+
+function z()
+{
+  var F=s*s+4;
+  if(m==0)
+    for(i=0;i<F;++i)
+    {
+      p[i]=i;
+    }
+  else if(m==1)
+    for(i=0;i<F;++i)
+    {
+      p[i]=2*(p[i-1]||n/2);
+    }
+  else if(m==2)
+    for(i=0;i<F;++i)
+    {
+      (p[i]=Math.pow(n,i))==1&&(p[i]=0)
+    }
+  p[0]='';
+}
+
+function b(a)
+{ 
+  if(a>3||a<0||a==undefined)
+  {
+    a==45&&w.a();
+    a==53&&c();
+    a==8&&e();
+    return;
+  };
+  
+  var A=a<2,B,C,D=0,
+      E=+!a,
+      F=+(a==1),
+      G=+(a==2),
+      H=+(a==3),
+      P,Q=A?-1:1,
+      R=F||H,
+      S=E||G,
+      T=+!(!A&&R),
+      U=+!(!A&&S);
+  
+  for(i=0;i<s;++i)
+    for(j=0;j<s;++j)
+      u[i][j]=t[i][j];
+  
+  while(++D!=s+3)
+    for(i=F-T,I=s-H,T||((P=I),(I=i),(i=P));[T?++i<I:--i>=I,B=i+(R?Q:0)][0];)
+      for(j=E-U,J=s-G,U||((P=J),(J=j),(j=P));[U?++j<J:--j>=J,C=j+(S?Q:0)][0];)
+      {
+        (D==s+1)?(
+          t[B][C]&&(
+            t[B][C]==t[i][j]&&(
+              ++t[B][C],
+              t[i][j]=0
+            )
+          )
+        ):(
+          t[B][C]||(
+            t[B][C]=t[i][j],
+            t[i][j]=0
+          )
+        )
+      }
+  
+  if(function(){
+    for(i=0;i<s;++i)
+      for(j=0;j<s;++j)
+        if(u[i][j]!=t[i][j])
+          return 1;
+  }())
+  {
+    e();
+    f();
+  }
+}
+
+function c()
+{
+  if(u)
+    for(i=0;i<s;++i)
+      for(j=0;j<s;++j)
+        t[i][j]=u[i][j];
+  f();
+}
+
+function e(a)
+{
+  var a=a||1,A=Math.random,B=Math.floor,C=0;
+  while(a)
+    (t[i=B(A()*s)][j=B(A()*s)]==0)&&((t[i][j]=(A()<0.7?1:2)),(--a))||(++C)>999?(a=0):0;
+}
+
+function f()
+{
+  var B='createElement',C='getElementById',P=d[C]('f'),Q,R=Math.floor((w.innerHeight-d[C]('g').offsetHeight-99)/s),E='style',F='appendChild';
+  P.innerHTML='',
+  g=d[C]('d').checked,
+  h=(+d[C]('e').value+50)/2;
+  
+  d.body[E].color=g?'#FFF':'#000';
+  d.body[E].background=g?'#000':'#FFF';
+  
+  for(i=0;i<s;++i)
+  {
+    P[F](Q=d[B]('tr'));
+    for(j=0;j<s;++j)
+    {
+      Q[F](C=d[B]('td'));
+      C[E].background='hsl('+q[t[i][j]]+',100%,'+h+'%)';
+      C[E].width=C[E].height=R-18+'px';
+      C[E].borderRadius='9px';
+      p[t[i][j]].toString().length>5&&(C[E].font.size='1em');
+      C[F](d.createTextNode(p[t[i][j]]));
+    }
+  }   
+}
+
+function r()
+{
+  w.prompt('Save code for actual game status:',w.btoa(JSON.stringify([m,n,s,t,u])));
+}
+
+function v()
+{
+  try
+  {
+    var A=JSON.parse(atob(w.prompt('Insert game save code to load:'))),C='getElementById',D='value';
+    d[C]('a')[D]=A[2];
+    d[C]('b')[D]=['Increasing','Adding','Multiplication'][A[0]];
+    d[C]('c')[D]=A[1];
+    a();
+    for(i=0;i<s;++i)
+      for(j=0;j<s;++j)
+      {
+        t[i][j]=A[3][i][j];
+        u[i][j]=A[4][i][j];
+      }
+    f();
+  }
+  catch(e)
+  {
+    alert('Entered save code is invalid or broken.');
+  }
+}
+
+
+
+d.onkeydown=function(A){b((A||w.event).keyCode-37)};
+
+setTimeout(a,99);
+
+
+
+</script>
+
+<table style="margin:0 auto;font-family:Comic Sans MS;border-spacing:9px">
+  <tr>
+    <th colspan=99>
+      <table id=g style="background:hsla(0,0%,50%,0.1);border-radius:22px;padding-right:9px;">
+        <tr>
+          <td style="font-size:7em;font-family:Impact" rowspan=9>
+            &nbsp;NamberZ&nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Platform size: <input type=number id=a min=2 max=9 value=4>
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            Darker theme: <input type=checkbox id=d onchange=f() accesskey=d>
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            <input type=submit onclick=y();f() value=Recolor accesskey=c>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Base number: <input type=number id=c min=2 max=9 value=2>
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            Lightness: <input type=range style=width:4em id=e value=50 onchange=f()>
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            <input type=submit onclick=a() value=Restart accesskey=r>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Mode:
+            <select style=width:8em id=b>
+              <option>Increasing</option>
+              <option>Adding</option>
+              <option selected>Multiplication</option>
+            </select>
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            <input type=submit onclick=r() value=Save accesskey=s>
+            &nbsp;&nbsp;&nbsp;
+            <input type=submit onclick=v() value=Load accesskey=l>
+          </td>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+          <td>
+            <input type=submit onclick=c() value=Undo accesskey=u>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            &nbsp;&nbsp;&nbsp;
+          </td>
+        </tr>
+      </table>
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <table id=f style="margin:0 auto;text-align:center;font-size:2em;background:hsla(0,0%,50%,0.1);padding:9px;border-collapse:separate;border-spacing:9px;border-radius:22px">
+        
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
